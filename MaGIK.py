@@ -25,17 +25,14 @@ import time
 #    else: window = [1/2., 1/6.]
 #    return window
 
-window = [1/2., 1/6.]
+window = [1/2.]
 #log = [True, False]
 log = [False]
-kernels = [ [[16, 14, 12, 10, 8, 6], [20,40,60,80,90]],
-           [[25, 22, 18, 15, 10, 5], [20,40,60,80,90]],
-           [[16, 12, 8, 4], [20,50,80]], 
-           [[25, 18, 10, 5], [20,50,80]]] # [[Kernels], [percentils]]
+kernels = [ [[16, 14, 12, 10, 8, 6], [20,40,60,80,90]] ] # [[Kernels], [percentils]]
 
-running_mean_size = [15, 30, 60]
+running_mean_size = [30]
 
-bins = [130, 156, 182]#, 520]
+bins = [130]#, 520]
 
 parameters = []
 
