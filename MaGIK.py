@@ -59,10 +59,10 @@ for i in range(len(log)):
 
 
 D_SEQ = [20000]
-COORDS1 = [90]
-COORDS2 = [-80]
-FIELD_PATH = ['field_quatro/'] 
-FIELD_BASE_NAME = ['field_quatro']
+COORDS1 = [147]
+COORDS2 = [-44]
+FIELD_PATH = ['Testes/field_um/']
+FIELD_BASE_NAME = ['field_um']
 
 for i in range(len(FIELD_PATH)):
     ##################
