@@ -45,8 +45,14 @@ def P_multiple(cor_iso, cor_obs, cor_err, mag_iso, mag_obs, mag_err, m_iso, a = 
     P_i = np.array(P_i)
     return(P_i)
 
-def running_mean_sdev(A, nline, ncol = None):
-    if ncol is None: ncol = nline
+def running_mean_sdev(A, nline, ncol = None, mask = None):
+
+    if mask is None:
+        mask = np.empty(A.shape)
+        mask[:] = 1
+
+    if ncol is None:
+        ncol = nline
 
     A_mean = np.zeros((A.shape[0], A.shape[1]))
     A_var = np.zeros((A.shape[0], A.shape[1]))
@@ -59,8 +65,18 @@ def running_mean_sdev(A, nline, ncol = None):
             col_min = col - ncol if (col-ncol) >= 0 else 0
             col_max = col + ncol if (col+ncol) <= A.shape[1] else A.shape[1]
 
-            A_mean[line,col] = A[line_min:(line_max+1), col_min:(col_max+1)].mean()
-            A_var[line,col] = A[line_min:(line_max+1), col_min:(col_max+1)].var()
+            A_ij = A[line_min:(line_max+1), col_min:(col_max+1)]
+            # Aplicar mascara para desconsiderar vazios
+            mask_ij = mask[line_min:(line_max+1), col_min:(col_max+1)]
+            A_ij = A_ij[mask_ij == 1]
+
+            if len(A_ij) == 0:
+                A_mean[line, col] = np.nan
+                A_var[line, col] = np.nan
+            else:
+                A_mean[line,col] = A_ij.mean()
+                A_var[line,col] = A_ij.var()
+
     A_sdev = np.sqrt(A_var)
 
     return A_mean, A_sdev

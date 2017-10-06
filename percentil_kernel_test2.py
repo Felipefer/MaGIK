@@ -238,6 +238,24 @@ def bg_kernel(probs_base_name,
     if return_xy: return density_field_bg, star_gal_b, star_gal_l, xbg, ybg, filter_bg
     else: return density_field_bg, star_gal_b, star_gal_l
 
+def empty_mask(gal_l,
+               gal_b,
+               field_size,
+               bins):
+
+    min_gal_l = gal_l
+    max_gal_l = gal_l + field_size[0]
+    min_gal_b = gal_b
+    max_gal_b = gal_b + field_size[1]
+
+    hbg, xbg, ybg, pbg = plt.hist2d(x=gal_l,
+                                    y=gal_b,
+                                    range=np.array([[min_gal_l, max_gal_l],
+                                                    [min_gal_b, max_gal_b]]),
+                                    bins=bins)
+
+    hbg[hbg != 0] = 1
+    return hbg
 
 def field_kernel(probs_base_name, 
                  probs_path,
@@ -406,7 +424,12 @@ def percentil_kernel(isoc_ages, isoc_metal, d_seq, probs_path, probs_base_name, 
                                                                                             return_xy = True,
                                                                                             save_number = save_number)
 
-                        A_mean, A_sdev = running_mean_sdev(density_field, nline = nline)
+                        mask = empty_mask(gal_l = star_gal_l,
+                                          gal_b = star_gal_b,
+                                          field_size = field_size,
+                                          bins = bins)
+
+                        A_mean, A_sdev = running_mean_sdev(density_field, nline = nline, mask = mask)
 
                         Mean   = density_field-A_mean
                         Desvio = (density_field-A_mean)/A_sdev
